@@ -1,6 +1,8 @@
 package es.daw01.savex.controller.rest_controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -72,10 +74,15 @@ public class RestAdminController {
             List<UserDTO> users = userService.getUsersDTO(userService.findAllByRole(UserType.USER));
 
             // Slice the list to show only 5 users
-            users = users.subList(offset, DataUtils.clamp(limit, 0, users.size()));
+            List<UserDTO> usersSublist = users.subList(offset, DataUtils.clamp(limit, 0, users.size()));
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("users", usersSublist);
+            response.put("total", users.size());
+            response.put("maxReached", usersSublist.size() >= users.size());
 
             // Return the users list
-            return ApiResponseDTO.ok(users);
+            return ApiResponseDTO.ok(response);
         }
         catch (Exception e){
             // Return error message
@@ -91,10 +98,15 @@ public class RestAdminController {
             List<PostDTO> posts = postService.getPostsDTO(postService.findAll());
 
             // Slice the list to show only 5 posts
-            posts = posts.subList(offset, DataUtils.clamp(limit, 0, posts.size()));
+            List<PostDTO> postsSublist = posts.subList(offset, DataUtils.clamp(limit, 0, posts.size()));
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("posts", postsSublist);
+            response.put("total", posts.size());
+            response.put("maxReached", postsSublist.size() >= posts.size());
 
             // Return the posts list
-            return ApiResponseDTO.ok(posts);
+            return ApiResponseDTO.ok(response);
         }
         catch (Exception e){
             // Return error message
