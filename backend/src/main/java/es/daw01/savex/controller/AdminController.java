@@ -49,8 +49,6 @@ public class AdminController {
         model.addAttribute("posts", postDetails);
         model.addAttribute("users", userDetails);
 
-        // model.addAttribute("comments", commentService.findAll());
-
         return "admin";
     }
 
